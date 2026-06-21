@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚗 AutoCompare AI – Osobisty Asystent Zakupu Samochodu
 
-## Getting Started
+**AutoCompare AI** to nowoczesna, lokalna aplikacja webowa stworzona, aby ułatwić i uporządkować proces zakupu używanego samochodu. Zamiast przeklejać dane z dziesiątek kart ogłoszeń (np. Otomoto, OLX) do Excela, aplikacja pozwala na szybkie gromadzenie ofert, automatyczne wyciąganie parametrów z opisu i generowanie szczegółowych raportów porównawczych przy użyciu sztucznej inteligencji (Gemini lub OpenAI).
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🌟 Kluczowe Funkcjonalności
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+*   **Szybkie dodawanie ofert na 3 sposoby:**
+    *   **Wklej Tekst Ogłoszenia:** Wklej surową treść skopiowaną z ogłoszenia. Lokalny parser w ułamku sekundy automatycznie wyciągnie takie parametry jak: marka, model, rocznik, cena, przebieg, numer VIN, silnik, skrzynia biegów, wyposażenie i lokalizacja.
+    *   **Wklej Link:** Szybkie dodawanie na bazie adresu URL.
+    *   **Formularz Ręczny:** Wygodne wprowadzanie danych krok po kroku.
+*   **Generowanie raportów AI w tle:**
+    *   Proces wysyłania zapytania i generowania raportu przez model językowy odbywa się w tle (dzięki React Context). Możesz swobodnie przeglądać inne zakładki aplikacji w trakcie trwania analizy. O statusie informuje świecący widżet w prawym dolnym rogu.
+*   **Kompleksowy Raport Porównawczy AI:**
+    *   **Ranking Opłacalności:** Ocena aut na papierze i ułożenie ich od najbardziej obiecującego.
+    *   **Kluczowe Różnice:** Porównanie wersji silnikowych, wyposażenia i przebiegu.
+    *   **Czerwone Flagi (Analiza Ryzyka):** Wypunktowanie zagrożeń (np. brak VIN w ogłoszeniu, podejrzanie niska cena, uszkodzenia w opisie).
+    *   **Trudne Pytania do Sprzedawcy:** Dedykowana lista pytań do zadania przed wyjazdem na oględziny.
+    *   **Checklista Oględzin:** Indywidualna lista kontrolna dopasowana pod dany silnik/skrzynię biegów (np. weryfikacja DPF/dwumasy dla diesla).
+*   **Pełna Prywatność i Bezpieczeństwo:**
+    *   Aplikacja działa w 100% lokalnie w przeglądarce (`client-only`). Brak zewnętrznej bazy danych – wszystkie oferty i raporty są zapisywane w pamięci podręcznej przeglądarki (`localStorage`).
+    *   Twoje klucze API Gemini lub OpenAI są bezpiecznie przechowywane tylko na Twoim komputerze i wysyłane bezpośrednio do oficjalnych serwerów dostawców.
+*   **Archiwizacja i Druk:**
+    *   Raporty porównawcze możesz zapisać w pamięci programu, a także łatwo wydrukować lub wyeksportować do formatu PDF.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📸 Zrzuty Ekranu
 
-## Learn More
+### Panel Główny (Dashboard)
+Centrum dowodzenia. Zawiera statystyki średnich cen i przebiegów dodanych pojazdów, listę ofert, a także filtry i wyszukiwarkę.
+![Panel Główny](screens/autocompare5.png)
 
-To learn more about Next.js, take a look at the following resources:
+### Dodawanie Oferty
+Szybkie wprowadzanie parametrów z automatycznym parserem treści ze schowka.
+![Dodawanie Oferty](screens/autocompare1.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Panel Porównania AI
+Wygodny wybór pojazdów do porównania side-by-side oraz historia wygenerowanych raportów.
+![Panel Porównania AI](screens/autocompare2.png)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Raport AI (Ranking Opłacalności)
+Początek szczegółowej analizy dokonanej przez AI w postaci rankingu opłacalności z uzasadnieniem.
+![Raport AI - Ranking](screens/autocompare3.png)
 
-## Deploy on Vercel
+### Analiza Ryzyka (Czerwone Flagi)
+Przykładowe ostrzeżenie wygenerowane przez AI w przypadku braku kluczowych informacji w ogłoszeniu (np. numeru VIN).
+![Raport AI - Analiza Ryzyka](screens/autocompare4.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚀 Jak Uruchomić Aplikację
+
+Aplikację można uruchomić na dwa sposoby:
+
+### Sposób 1: Jednym kliknięciem (Windows)
+W katalogu głównym projektu znajduje się plik **`Uruchom_Aplikacje.bat`**. 
+1. Kliknij na niego dwukrotnie.
+2. Skrypt automatycznie uruchomi lokalny serwer w tle i po 2 sekundach otworzy aplikację w domyślnej przeglądarce pod adresem: **`http://localhost:3000`**.
+
+### Sposób 2: Klasycznie przez terminal
+Jeśli wolisz uruchomić aplikację ręcznie:
+1. Zainstaluj zależności (przy pierwszym uruchomieniu):
+   ```bash
+   npm install
+   ```
+2. Uruchom serwer deweloperski:
+   ```bash
+   npm run dev
+   ```
+3. Otwórz w przeglądarce adres: [http://localhost:3000](http://localhost:3000).
+
+---
+
+## 🔑 Konfiguracja API AI
+
+Aby móc generować raporty przy pomocy sztucznej inteligencji:
+1. Wejdź w zakładkę **Ustawienia API** w lewym dolnym rogu paska bocznego.
+2. Wybierz swojego dostawcę API (**Google Gemini** lub **OpenAI**).
+3. Wklej swój klucz API:
+   * Klucz dla Gemini możesz wygenerować bezpłatnie w [Google AI Studio](https://aistudio.google.com/).
+   * Klucz dla OpenAI możesz wygenerować na platformie [OpenAI API](https://platform.openai.com/).
+4. Kliknij **Zapisz Ustawienia**. Klucz zostanie zapisany w lokalnej pamięci Twojej przeglądarki.
+
+*Uwaga: W przypadku braku podania klucza API, aplikacja wygeneruje uproszczony raport symulacyjny bazujący na wbudowanych regułach matematyczno-logicznych.*
+
+---
+
+## 🛠️ Użyte Technologie
+
+*   **Framework:** Next.js (React) z Turbopack
+*   **Stylizacja:** Czysty CSS (Vanilla CSS) – interfejs zaprojektowany w nowoczesnym stylu *glassmorphism* z pełną obsługą ciemnego motywu.
+*   **Język:** TypeScript / JavaScript
+*   **Integracja AI:** API Gemini (`gemini-2.5-flash`) oraz API OpenAI (`gpt-4o-mini`) z mechanizmem automatycznego wznawiania zapytań (retry z wykładniczym czasem oczekiwania w przypadku obciążenia serwerów).
