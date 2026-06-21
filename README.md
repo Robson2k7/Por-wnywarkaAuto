@@ -30,23 +30,23 @@
 
 ### Panel Główny (Dashboard)
 Centrum dowodzenia. Zawiera statystyki średnich cen i przebiegów dodanych pojazdów, listę ofert, a także filtry i wyszukiwarkę.
-![Panel Główny](screens/autocompare5.png)
+![Panel Główny](screens/autocompare1.png)
 
 ### Dodawanie Oferty
 Szybkie wprowadzanie parametrów z automatycznym parserem treści ze schowka.
-![Dodawanie Oferty](screens/autocompare1.png)
+![Dodawanie Oferty](screens/autocompare2.png)
 
 ### Panel Porównania AI
 Wygodny wybór pojazdów do porównania side-by-side oraz historia wygenerowanych raportów.
-![Panel Porównania AI](screens/autocompare2.png)
+![Panel Porównania AI](screens/autocompare3.png)
 
 ### Raport AI (Ranking Opłacalności)
 Początek szczegółowej analizy dokonanej przez AI w postaci rankingu opłacalności z uzasadnieniem.
-![Raport AI - Ranking](screens/autocompare3.png)
+![Raport AI - Ranking](screens/autocompare4.png)
 
 ### Analiza Ryzyka (Czerwone Flagi)
 Przykładowe ostrzeżenie wygenerowane przez AI w przypadku braku kluczowych informacji w ogłoszeniu (np. numeru VIN).
-![Raport AI - Analiza Ryzyka](screens/autocompare4.png)
+![Raport AI - Analiza Ryzyka](screens/autocompare5.png)
 
 ---
 
