@@ -7,6 +7,7 @@ import RadialScore from '../components/RadialScore';
 import ComparisonReport from '../components/ComparisonReport';
 import { Icon } from '../components/Icons';
 import { useAIComparison } from '../context/AIComparisonContext';
+import CarDetailDrawer from '../components/CarDetailDrawer';
 
 // Interfejs zapisanego raportu
 interface SavedReport {
@@ -117,6 +118,9 @@ export default function DashboardPage() {
   const [savedReports, setSavedReports] = useState<SavedReport[]>([]);
   const [viewingSavedReport, setViewingSavedReport] = useState<SavedReport | null>(null);
 
+  const [editingCar, setEditingCar] = useState<Car | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
   // Pobranie kontekstu porównania AI
   const { activeComparison, startComparison, setViewing } = useAIComparison();
 
@@ -150,6 +154,56 @@ export default function DashboardPage() {
   const saveCars = (updatedCars: Car[]) => {
     localStorage.setItem('autocompare_cars', JSON.stringify(updatedCars));
     setCars(updatedCars);
+  };
+
+  // Funkcja zapisująca zaktualizowane auto z szuflady
+  const handleSaveEditedCar = (updatedCar: Car) => {
+    const updated = cars.map(c => c.id === updatedCar.id ? updatedCar : c);
+    saveCars(updated);
+    setEditingCar(null);
+  };
+
+  // Eksport bazy ofert i raportów do pliku JSON
+  const handleExportDatabase = () => {
+    const database = {
+      cars,
+      savedReports
+    };
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(database, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `autocompare_backup_${new Date().toISOString().slice(0, 10)}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  };
+
+  // Import bazy z pliku JSON
+  const handleImportDatabase = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const imported = JSON.parse(event.target?.result as string);
+        if (imported.cars && Array.isArray(imported.cars)) {
+          if (confirm('Czy chcesz zastąpić aktualną bazę danymi z pliku kopii zapasowej?')) {
+            saveCars(imported.cars);
+            if (imported.savedReports && Array.isArray(imported.savedReports)) {
+              setSavedReports(imported.savedReports);
+              localStorage.setItem('autocompare_saved_reports', JSON.stringify(imported.savedReports));
+            }
+            alert('Dane zostały pomyślnie zaimportowane!');
+          }
+        } else {
+          alert('Błędny format pliku kopii zapasowej.');
+        }
+      } catch (err) {
+        alert('Wystąpił błąd podczas odczytu pliku.');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
   };
 
   // Zapisywanie wygenerowanego raportu do bazy lokalnej
@@ -435,6 +489,34 @@ export default function DashboardPage() {
           <option value="price_desc">Cena: od najwyższej</option>
           <option value="mileage_asc">Przebieg: od najmniejszego</option>
         </select>
+
+        <div className="backup-buttons-container">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImportDatabase}
+            accept=".json"
+            style={{ display: 'none' }}
+          />
+          <button
+            className="btn btn-secondary"
+            style={{ padding: '10px 14px', borderRadius: 'var(--radius-md)', fontSize: '13px' }}
+            onClick={() => fileInputRef.current?.click()}
+            title="Importuj kopię zapasową JSON"
+          >
+            <Icon.Upload size={16} />
+            Importuj
+          </button>
+          <button
+            className="btn btn-secondary"
+            style={{ padding: '10px 14px', borderRadius: 'var(--radius-md)', fontSize: '13px' }}
+            onClick={handleExportDatabase}
+            title="Eksportuj kopię zapasową JSON"
+          >
+            <Icon.Download size={16} />
+            Eksportuj
+          </button>
+        </div>
       </div>
 
       {/* Tabela ofert */}
@@ -527,6 +609,14 @@ export default function DashboardPage() {
                       </td>
                       <td className="no-print">
                         <div style={{ display: 'flex', gap: '8px' }}>
+                          <button
+                            className="btn btn-secondary"
+                            style={{ padding: '6px 10px', borderRadius: 'var(--radius-sm)' }}
+                            onClick={() => setEditingCar(car)}
+                            title="Edytuj i podejrzyj ofertę"
+                          >
+                            <Icon.Edit size={16} />
+                          </button>
                           {car.link && (
                             <a
                               href={car.link}
@@ -612,6 +702,13 @@ export default function DashboardPage() {
           </button>
         </div>
       )}
+
+      {/* Szuflada podglądu/edycji oferty */}
+      <CarDetailDrawer
+        car={editingCar}
+        onClose={() => setEditingCar(null)}
+        onSave={handleSaveEditedCar}
+      />
     </div>
   );
 }
